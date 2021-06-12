@@ -61,6 +61,9 @@ function [w,alpha,z,beta] = pdlssvm(X,Y,rho,c,c1,c2)
         z=temp*(c*B*e+rho*w+rho*u1+rho*B*beta-rho*u3);
 %         z=temp*(c*B*e+rho*w+rho*u2);
         alpha=shrinkage(c2/rho*e,beta-u2);
+        
+
+        
         beta=temp1*rho*(alpha+u2+B'*z+B'*u3+1/rho*e);
 %         beta=shrinkage(c2/rho*e,alpha-u3+1/rho*Y*e);
 %         beta=shrinkage(c2/rho*e,alpha-u3+1/rho*e);
