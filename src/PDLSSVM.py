@@ -10,7 +10,7 @@ class PDLSSVM:
         self.RELTOL   = 1e-2
         
         
-    def fit(self, train_X, train_y_):
+    def fit(self, train_X, train_y_, verbose=False):
         import numpy as np
 
         self.X = train_X
@@ -63,7 +63,9 @@ class PDLSSVM:
     
         end_time = PDLSSVM.get_time()
         total_time = PDLSSVM.time_diff(start_time, end_time)
-        print(f"Training Done\nTotal Running Time: {total_time}")
+        
+        if verbose:
+            print(f"Training Done\nTotal Running Time: {total_time}")
         
         self.y = y
         self.w = w
@@ -72,7 +74,7 @@ class PDLSSVM:
         self.beta = beta
     
         
-    def predict(self, test_X, sign_flag=1):
+    def predict(self, test_X, sign_flag=1, verbose=False):
         import numpy as np
 
         start_time = PDLSSVM.get_time()
@@ -95,7 +97,9 @@ class PDLSSVM:
         
         end_time = PDLSSVM.get_time()
         total_time = PDLSSVM.time_diff(start_time, end_time)
-        print(f"Prediction Done\nTotal Running Time: {total_time}")
+        
+        if verbose:
+            print(f"Prediction Done\nTotal Running Time: {total_time}")
         
         return pred, sparse_primal, sparse_dual
     
