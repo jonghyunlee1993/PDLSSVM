@@ -52,7 +52,7 @@ function [w,alpha,z,beta] = pdlssvm(X,Y,rho,c,c1,c2)
     temp=inv(temp);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 %     temp1=inv((1+rho)*H+(1/c+rho)*I);
-    temp1=inv(H+rho*(B'*B)+(1/c+rho)*I);
+    temp1=inv(Y*H*Y'+rho*(B'*B)+(1/c+rho)*I);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   
     while(t<=MAX_ITER) && max([norm(z-B*beta,2),norm(w-z,2),norm(beta-alpha)])>=eps1  
