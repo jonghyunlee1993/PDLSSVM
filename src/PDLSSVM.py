@@ -69,6 +69,7 @@ class PDLSSVM:
         
         self.y = y
         self.e = e
+        self.I = I
         self.w = w
         self.alpha = alpha
         self.z = z
@@ -87,8 +88,9 @@ class PDLSSVM:
                 pred = np.sign(test_X @ self.w)
         else:
             if b_flag:
-                ye_inv = np.inv(self.y @ self.e)
-                b      = ye_inv @ self.e - ye_inv @ (XY.T @ XY + 1 / self.c @ I) @ self.alpha
+                XY     = self.X.T @ self.y.T
+                ye_inv = np.linalg.pinv(self.y @ self.e)
+                b      = ye_inv @ self.e - ye_inv @ (XY.T @ XY + 1 / self.c * self.I) @ self.alpha
                 if self.beta.all() == 0:
                     self.w = self.alpha.T @ self.y @ self.X
                     pred   = np.sign(test_X @ self.w.T + b)
