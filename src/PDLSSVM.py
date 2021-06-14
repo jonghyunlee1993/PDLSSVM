@@ -35,6 +35,7 @@ class PDLSSVM:
         np.fill_diagonal(y, y_)
 
         H  = self.X @ self.X.T
+        XY = self.X.T @ y.T
         B  = np.dot(self.X.T, y)
         I  = np.eye(m)
 
@@ -43,8 +44,9 @@ class PDLSSVM:
         ew = np.ones((n, 1))
 
         Q_inv = np.linalg.inv((1 + 2 * self.rho) * Iw + self.c * Hw)
-        P_inv = np.linalg.inv(y @ H @ y.T + self.rho * (B.T @ B) + (1 / self.c + self.rho) * I)
-    
+        # P_inv = np.linalg.inv(y @ H @ y.T + self.rho * (B.T @ B) + (1 / self.c + self.rho) * I)
+        P_inv = np.linalg.inv(XY.T @ XY + self.rho * (B.T @ B) + (1 / self.c + self.rho) * I)
+
         while(t <= self.MAX_ITER) and max([np.linalg.norm(z - B @ beta, 2), np.linalg.norm(w - z, 2), np.linalg.norm(beta - alpha)]) >= eps1:
             theta = 1 / 2 * (z - u1 + B @ beta - u3)
             w     = PDLSSVM.shrinkage(self.c1 / (2 * self.rho) * ew, theta)
