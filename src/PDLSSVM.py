@@ -68,29 +68,41 @@ class PDLSSVM:
             print(f"Training Done\nTotal Running Time: {total_time}")
         
         self.y = y
+        self.e = e
         self.w = w
         self.alpha = alpha
         self.z = z
         self.beta = beta
     
         
-    def predict(self, test_X, sign_flag=1, verbose=False):
+    def predict(self, test_X, b_flag=True, sign_flag=True, verbose=False):
         import numpy as np
 
         start_time = PDLSSVM.get_time()
         
-        if sign_flag != 1:
+        if not sign_flag:
             if self.w == 0:
                 pred = np.sign(test_X @ self.z)
             else:
                 pred = np.sign(test_X @ self.w)
         else:
-            if self.beta.all() == 0:
-                self.w = self.alpha.T @ self.y @ self.X
-                pred   = np.sign(test_X @ self.w.T)
+            if b_flag:
+                ye_inv = np.inv(self.y @ self.e)
+                b      = ye_inv @ self.e - ye_inv @ (XY.T @ XY + 1 / self.c @ I) @ self.alpha
+                if self.beta.all() == 0:
+                    self.w = self.alpha.T @ self.y @ self.X
+                    pred   = np.sign(test_X @ self.w.T + b)
+                else:
+                    self.w = self.beta.T @ self.y @ self.X
+                    pred   = np.sign(test_X @ self.w.T + b)
+            # without b (intercept)
             else:
-                self.w = self.beta.T @ self.y @ self.X
-                pred   = np.sign(test_X @ self.w.T)
+                if self.beta.all() == 0:
+                    self.w = self.alpha.T @ self.y @ self.X
+                    pred   = np.sign(test_X @ self.w.T)
+                else:
+                    self.w = self.beta.T @ self.y @ self.X
+                    pred   = np.sign(test_X @ self.w.T)
                 
         sparse_primal = sum(self.w == 0)
         sparse_dual   = sum(self.alpha == 0)
