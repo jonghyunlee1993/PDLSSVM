@@ -76,7 +76,7 @@ class PDLSSVM:
         self.beta = beta
     
         
-    def predict(self, test_X, b_flag=True, sign_flag=True, verbose=False):
+    def predict(self, test_X, b_flag=False, sign_flag=True, verbose=False):
         import numpy as np
 
         start_time = PDLSSVM.get_time()
