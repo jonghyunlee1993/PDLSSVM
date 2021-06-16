@@ -106,8 +106,8 @@ class PDLSSVM:
                     self.w = self.beta.T @ self.y @ self.X
                     pred   = np.sign(test_X @ self.w.T)
                 
-        sparse_primal = sum(self.w == 0)
-        sparse_dual   = sum(self.alpha == 0)
+        sparse_primal = np.sum(self.w == 0)
+        sparse_dual   = np.sum(self.alpha == 0)
         
         end_time = PDLSSVM.get_time()
         total_time = PDLSSVM.time_diff(start_time, end_time)
@@ -132,5 +132,6 @@ class PDLSSVM:
     @staticmethod
     def shrinkage(X, kappa):
         import numpy as np
-        return np.maximum(0, np.subtract(X, kappa)) - np.maximum(0, np.subtract(-X, kappa))
+#         return np.maximum(0, np.subtract(X, kappa)) - np.maximum(0, np.subtract(-X, kappa))
+        return np.sign(X) * np.maximum(np.abs(X) - kappa, 0.)
     
